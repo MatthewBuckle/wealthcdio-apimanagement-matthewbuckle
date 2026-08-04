@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -103,6 +105,28 @@ public class TransactionServiceImpl implements TransactionService {
                 .map(this::toResponse)
                 .toList();
     }
+
+    public List<TransactionResponse> statement(Long accountId, LocalDate fromDate, LocalDate toDate) {
+        if (fromDate != null && toDate != null && fromDate.isAfter(toDate)) {
+            throw new IllegalArgumentException(
+                    Constant.INVALID_DATE);
+        }
+        getAccount(accountId);
+        List<Transaction> transactions;
+
+        if (fromDate != null && toDate != null) {
+            transactions = transactionRepository.findByAccount_IdAndTimestampBetweenOrderByTimestampDesc(
+                    accountId,
+                    fromDate.atStartOfDay(),
+                    toDate.atTime(LocalTime.MAX));
+        } else {
+            transactions = transactionRepository.findByAccount_IdOrderByTimestampDesc(accountId);
+        }
+        return transactions.stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
 
     private Transaction recordTransaction(Account account, String type, BigDecimal amount) {
         Transaction transaction = Transaction.builder()
