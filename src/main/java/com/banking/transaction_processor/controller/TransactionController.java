@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -54,10 +55,22 @@ public class TransactionController {
 
         List<TransactionResponse> response = transactionService.history(accountId);
         return ResponseEntity.ok(ApiResponse.<List<TransactionResponse>>builder()
-                        .success(true)
-                        .message(Constant.TRANSACTION_HISTORY)
-                        .data(response)
-                        .build()
+                .success(true)
+                .message(Constant.TRANSACTION_HISTORY)
+                .data(response)
+                .build()
+        );
+    }
+
+    @GetMapping("/statement/{accountId}")
+    public ResponseEntity<ApiResponse<List<TransactionResponse>>> statement(@PathVariable Long accountId, @RequestParam LocalDate fromDate, @RequestParam LocalDate toDate) {
+
+        List<TransactionResponse> response = transactionService.statement(accountId, fromDate, toDate);
+        return ResponseEntity.ok(ApiResponse.<List<TransactionResponse>>builder()
+                .success(true)
+                .message(Constant.TRANSACTION_HISTORY)
+                .data(response)
+                .build()
         );
     }
 }
