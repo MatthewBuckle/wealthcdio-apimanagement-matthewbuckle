@@ -6,4 +6,5 @@ import com.banking.transaction_processor.dto.CreateAccountRequest;
 public interface AccountService {
 
     public AccountResponse createAccount(CreateAccountRequest createAccountRequest);
+    public AccountResponse getBalance(Long id);
 }
