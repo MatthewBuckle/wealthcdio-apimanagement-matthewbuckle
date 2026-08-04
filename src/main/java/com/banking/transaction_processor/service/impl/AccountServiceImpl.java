@@ -29,4 +29,17 @@ public class AccountServiceImpl implements AccountService {
                 .accountHolderName(account.getAccountHolderName())
                 .email(account.getEmail()).build();
     }
+
+    public AccountResponse getBalance(Long id) {
+        Account account = getAccount(id);
+        return AccountResponse.builder()
+                .accountHolderName(account.getAccountHolderName())
+                .balance(account.getBalance()).build();
+
+    }
+
+    public Account getAccount(Long id) {
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new AccountNotFoundException(Constant.ACCOUNT_NOT_FOUND));
+    }
 }
