@@ -4,6 +4,7 @@ import com.banking.transaction_processor.dto.TransactionResponse;
 import com.banking.transaction_processor.dto.TransferRequest;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface TransactionService {
@@ -12,4 +13,5 @@ public interface TransactionService {
     public TransactionResponse withdraw(Long accountId, BigDecimal amount);
     public TransactionResponse transfer(TransferRequest transferRequest);
     public List<TransactionResponse> history(Long accountId);
+    public List<TransactionResponse> statement(Long accountId, LocalDate fromDate, LocalDate toDate);
 }
